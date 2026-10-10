@@ -1,0 +1,7 @@
+# For a replacement body that is already cooked and built on the game's body skeleton. Change the names and the
+# path, save this file in RSDragonwilds/Binaries/Win64/ue4ss/Mods/RSHC/Parts/ and restart the game.
+# One variant line for each game body you support: SK_F_MED_Body_A_01 (female), SK_M_MED_Body_A_01 (male).
+id=yourname:soft_body
+slot=body
+label=Soft Body
+variant.SK_F_MED_Body_A_01=/Game/Mods/YourPack/SK_SoftBody.SK_SoftBody

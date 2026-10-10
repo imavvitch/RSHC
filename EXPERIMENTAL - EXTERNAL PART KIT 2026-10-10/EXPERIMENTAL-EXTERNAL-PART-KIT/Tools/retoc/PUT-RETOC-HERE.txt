@@ -1,0 +1,9 @@
+The build needs retoc.exe, a free tool that writes the container files Unreal 5.6 games load.
+
+1. Download the latest Windows release from https://github.com/trumank/retoc/releases
+2. Put retoc.exe in this folder (next to this note).
+
+Or keep it anywhere and pass its place to the build:
+    BUILD.cmd -Retoc "C:\Tools\retoc\retoc.exe"
+
+retoc is not part of RSHC and is not included in this kit.

@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXPERIMENTAL: EXTERNAL PART KIT (RSHC)</title>
+<style>
+:root{--bg:#f6f4ef;--panel:#fffdf8;--ink:#23201b;--soft:#5d574c;--line:#d9d2c3;--accent:#8a4b12;--code:#efe9db;--warn:#fff3d6;--warnline:#d9a520}
+@media (prefers-color-scheme:dark){:root{--bg:#191713;--panel:#211e19;--ink:#ece6da;--soft:#b3aa99;--line:#3b362d;--accent:#e2a15c;--code:#2b2720;--warn:#3a2f12;--warnline:#b98a1a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Segoe UI",system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:28px 16px 80px}
+h1{font-size:30px;line-height:1.2;margin:0 0 6px}
+h2{font-size:21px;margin:38px 0 10px;padding-top:14px;border-top:1px solid var(--line)}
+h3{font-size:17px;margin:22px 0 6px}
+p,li{color:var(--ink)} .lead{color:var(--soft);margin-top:0}
+code,pre{font-family:Consolas,"Cascadia Mono",monospace;font-size:14px;background:var(--code);border-radius:4px}
+code{padding:1px 5px} pre{padding:12px 14px;overflow-x:auto;line-height:1.45}
+table{border-collapse:collapse;width:100%;margin:10px 0;background:var(--panel);display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{font-weight:600}
+.note{background:var(--warn);border-left:4px solid var(--warnline);padding:10px 14px;margin:14px 0;border-radius:0 4px 4px 0}
+ol li,ul li{margin:5px 0} a{color:var(--accent)}
+.toc{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 18px}
+</style>
+</head>
+<body>
+<main>
+<h1>EXPERIMENTAL: EXTERNAL PART KIT <small>for RSHC</small></h1>
+<p class="lead">Add your own part to the RSHC character editor in RuneScape: Dragonwilds, with colour sections the player can recolour and sliders that reshape it. You make the model; the kit turns it into a pack players can install.</p>
+
+<div class="note"><b>Experimental.</b> The build in this kit has been run from start to finish on the included sample. The method it uses (a part hung on a bone, sliders from morph targets, sections from material names) has been seen working in game with an earlier sample. Your own models, textured materials and co-op with your pack have not been tested by us. Test before you share.</div>
+
+<div class="toc">
+<b>In this guide</b>
+<ol>
+<li><a href="#need">What you need</a></li>
+<li><a href="#sample">Try the sample first</a></li>
+<li><a href="#model">Make your model</a></li>
+<li><a href="#config">Fill in part.json</a></li>
+<li><a href="#build">Build</a></li>
+<li><a href="#test">Install and test</a></li>
+<li><a href="#share">Share it</a></li>
+<li><a href="#more">Going further: textures, extra sliders, other kinds of part</a></li>
+<li><a href="#existing">Already have a working mod? Add one small file</a></li>
+<li><a href="#trouble">When something is wrong</a></li>
+</ol>
+</div>
+
+<p><b>Already have a cooked mod that works in the game</b> (a hair, a tail, a body)? You do not need to build anything with this kit. Go straight to <a href="#existing">section 9</a>.</p>
+
+<h2 id="need">1. What you need</h2>
+<ul>
+<li><b>RSHC</b> installed in the game: the October 2026 Player Release or later.</li>
+<li><b>Unreal Engine 5.6</b> from the Epic Games launcher. It must be 5.6, the version the game uses. You do not need to know Unreal: the build drives it for you.</li>
+<li><b>retoc.exe</b>, a free tool. See <code>Tools\retoc\PUT-RETOC-HERE.txt</code>.</li>
+<li><b>A 3D program that exports glTF</b> (<code>.glb</code>), such as Blender. FBX also works.</li>
+<li>About 3 GB of free disk space for Unreal's shader cache, and patience for the first build (30 to 60 minutes; later builds take a few).</li>
+</ul>
+<p>Put the kit in a <b>short folder path without spaces</b>, for example <code>C:\RSHCKit</code>. The build refuses long paths and paths with spaces, because Unreal fails on them in confusing ways.</p>
+
+<h2 id="sample">2. Try the sample first</h2>
+<p>The folder <code>Ready-To-Install-Sample</code> holds the sample already built with this kit. Installing it shows you what a finished part looks like in the editor before you make your own.</p>
+<ol>
+<li>Close the game.</li>
+<li>Copy the <code>RSDragonwilds</code> folder from <code>Ready-To-Install-Sample</code> over the <code>RSDragonwilds</code> folder of your game install. Nothing is replaced; two folders gain new files.</li>
+<li>Start the game, open the RSHC editor, and under <b>Parts</b> choose <b>Asset Kit</b>, then <b>Kit Sample</b>. A small torso shape appears beside your hips. The sample is not part of RSHC itself: it is only in the editor once you have installed it from this kit.</li>
+<li>Below the list are four sliders. <b>Waist Wide</b> and <b>Body Tall</b> come from the model's two morph targets. <b>Sample size</b> and <b>Side offset</b> were added in <code>part.json</code>.</li>
+<li>In the colour panel pick <b>Lower</b> or <b>Upper</b> and set a colour. Each section changes on its own.</li>
+<li>Choose <b>Vanilla</b> to take the part off.</li>
+</ol>
+<p>The same sample is what <code>part.json</code> is set up to build, so you can also run <code>BUILD.cmd</code> unchanged to check that your Unreal and retoc are in place.</p>
+
+<h2 id="model">3. Make your model</h2>
+<p>This kit builds one kind of part: a model that <b>hangs on one bone of the character</b> (a tail on the pelvis, horns on the head, a pauldron on a shoulder). It moves and turns with that bone. It does not bend with the rest of the body.</p>
+
+<h3>The model itself</h3>
+<ul>
+<li><b>It needs a skeleton</b>, even a single bone, and every vertex needs skin weights. Unreal only gives sliders to skinned meshes. The sample has two bones.</li>
+<li><b>Its origin is where it attaches.</b> The model's origin is placed on the bone you name. Build the part around the origin the way it should sit on that bone.</li>
+<li><b>Real-world size, in metres</b> for glTF. A character is about 1.8 m tall.</li>
+<li><b>UVs</b> on every part of the mesh.</li>
+<li><b>One mesh object</b> in the file. File name: letters, digits and <code>_</code> only, 40 characters at most.</li>
+</ul>
+
+<h3>Colour sections come from material names</h3>
+<p>Every material on your model becomes one material slot. The <b>name</b> you give the material decides what the player can do with that part of the mesh:</p>
+<table>
+<tr><th>Material name</th><th>In the game</th><th>Use it for</th></tr>
+<tr><td><code>RSHC_tint_<i>id</i></code></td><td>The player picks a colour. Your own material and textures stay; the colour multiplies them.</td><td>Almost everything. Start here.</td></tr>
+<tr><td><code>RSHC_hair_<i>id</i></code></td><td>Follows the character's hair colour by default; the player can override it.</td><td>Fur, tufts, manes.</td></tr>
+<tr><td><code>RSHC_skin_<i>id</i></code></td><td>Follows the character's skin by default; the player can override it.</td><td>Bare skin on ears, tails, horns bases.</td></tr>
+<tr><td><code>RSHC_own_<i>id</i></code></td><td>The player picks a colour, drawn with the game's hair shader instead of your material.</td><td>A hair-like look in a free colour.</td></tr>
+<tr><td>any other name</td><td>Keeps its look. Not recolourable.</td><td>Fixed details: metal fittings, gems.</td></tr>
+</table>
+<ul>
+<li><code><i>id</i></code> is lowercase letters, digits and <code>_</code>, starting with a letter, 24 characters at most. It is also the label the player sees: <code>RSHC_tint_inner_ear</code> shows as "Inner ear".</li>
+<li>Up to <b>8</b> recolourable sections per part. Each needs its own id.</li>
+<li>Make ids specific to your part (<code>foxtail_tip</code>, not <code>tip</code>). Saved colours are stored by slot and section id, so two parts in the same category that share an id also share the saved colour.</li>
+<li>Recolourable sections start <b>white</b> in game until the player picks a colour. With a texture, white means "as painted".</li>
+<li><code>hair</code>, <code>skin</code> and <code>own</code> sections are drawn with the game's materials, which read the game's textures at <b>your</b> UVs. Expect to adjust UVs to get a clean look. <code>tint</code> has no such surprise.</li>
+</ul>
+
+<h3>Sliders come from morph targets</h3>
+<p>Every morph target (a <i>shape key</i> in Blender) becomes a 0 to 1 slider in the editor, with no extra work.</p>
+<ul>
+<li>Name them in <code>CamelCase</code> or with <code>_</code>, using letters, digits and <code>_</code> only. <code>WaistWide</code> shows as "Waist Wide".</li>
+<li>Sculpt each one at its <b>strongest</b>; that is slider value 1.</li>
+<li>Up to <b>64</b> sliders per part.</li>
+<li>In Blender's glTF export, keep <b>Shape Keys</b> ticked, and <b>Skinning</b> on.</li>
+</ul>
+
+<h2 id="config">4. Fill in part.json</h2>
+<p>Put your model in the <code>Source</code> folder and open <code>part.json</code> in a text editor. It is the only file you edit.</p>
+<table>
+<tr><th>Field</th><th>What to put</th></tr>
+<tr><td><code>pack</code></td><td>A short name for your pack, 3 to 24 letters or digits, no spaces (<code>FoxTail</code>). It names your files and your asset folder. Never reuse another pack's name.</td></tr>
+<tr><td><code>model</code></td><td>Your model file, for example <code>Source/FoxTail.glb</code>.</td></tr>
+<tr><td><code>id</code></td><td><code>yourname:part_name</code>. This is what save files and co-op remember. <b>Never change it</b> after you release.</td></tr>
+<tr><td><code>label</code></td><td>The name players see, 40 characters at most (letters, digits, spaces, <code>_</code>, <code>-</code>).</td></tr>
+<tr><td><code>slot</code></td><td>The category key, lowercase (<code>tail</code>, <code>horns</code>, <code>wings</code>). A new key makes a new category. Parts in the same category replace each other; parts in different categories can be worn together.</td></tr>
+<tr><td><code>slotLabel</code></td><td>The category name players see. Two packs that share a <code>slot</code> must use the same label.</td></tr>
+<tr><td><code>socket</code></td><td>The bone the part hangs on. Names known to exist on the character: <code>pelvis</code>, <code>spine_01</code>, <code>spine_02</code>, <code>spine_03</code>, <code>neck_01</code>, <code>head</code>, <code>clavicle_l</code>, <code>clavicle_r</code>, <code>upperarm_l</code>, <code>upperarm_r</code>, <code>hand_l</code>, <code>hand_r</code>, <code>calf_l</code>, <code>calf_r</code>.</td></tr>
+<tr><td><code>anchor</code></td><td><code>"body"</code>, or <code>"head"</code> for parts on the head (the head is its own mesh in this game; use it with <code>"socket": "head"</code>).</td></tr>
+<tr><td><code>materials</code></td><td><code>"lit"</code>: the kit makes a simple material for every slot, lit by the world, with your model's base colour texture if it has one. <code>"unlit"</code>: the same but flat and always bright. <code>"keep"</code>: you made the materials yourself in Unreal (see section 8).</td></tr>
+<tr><td><code>extraLines</code></td><td>Optional extra sliders, one text line each (see section 8). The two in the sample let the player resize and move the part; keep something like them so players can fit your part to their character.</td></tr>
+</table>
+<p>The slots <code>body</code>, <code>brows</code>, <code>beard</code>, <code>skin</code>, <code>face</code> and <code>eyes</code> are reserved by RSHC.</p>
+
+<h2 id="build">5. Build</h2>
+<p>Double-click <code>BUILD.cmd</code>. It runs five steps and says which one it is on:</p>
+<ol>
+<li>imports your model into the kit's Unreal project,</li>
+<li>checks names, sets up the materials and writes the part definition (a small <code>.rshcpart</code> text file),</li>
+<li>cooks the assets for the game,</li>
+<li>packs them into the three container files the game loads,</li>
+<li>checks the result: that every morph and section name is really in the cooked mesh, that the colour parameter survived, that no shader failed.</li>
+</ol>
+<p>If something is wrong it stops with one sentence saying what. When it finishes it prints two places:</p>
+<ul>
+<li><code>Build\<i>date-time</i>\Install\RSDragonwilds</code>: copy this over your game's <code>RSDragonwilds</code> folder to test.</li>
+<li><code>Build\<i>date-time</i>\<i>YourPack</i>.zip</code>: the file to share, with a short read-me for players inside.</li>
+</ul>
+
+<h2 id="test">6. Install and test</h2>
+<p>Close the game, copy the <code>RSDragonwilds</code> folder from the build over the game's, start the game. The game only looks for packs when it starts.</p>
+<p>Check each of these before sharing:</p>
+<ol>
+<li>The part is in its category and sits where it should, at a normal size and at the smallest and largest body sizes.</li>
+<li>Each slider moves the shape you expect, with colours applied.</li>
+<li>Each section takes a colour without changing the others.</li>
+<li>It looks right outdoors in daylight, in shade and indoors, not only in the editor's light.</li>
+<li>Save, close the editor, reopen: colours and sliders are still there. Restart the game: still there.</li>
+<li>Choosing Vanilla removes it cleanly.</li>
+<li>If you can, with a second player who has the pack: they see your part, colours and sliders.</li>
+</ol>
+
+<h2 id="share">7. Share it</h2>
+<ul>
+<li>Share the zip from the build. It contains only your pack, never RSHC itself.</li>
+<li><b>In co-op every player needs your pack.</b> The game sends which part is worn and its settings, not the model. A player without the pack sees no part; nothing breaks, and the choice is kept for when they install it.</li>
+<li>For an update, keep the same <code>id</code> and <code>pack</code> and tell players to replace the old files. Renaming a morph or a section id loses what players saved for it.</li>
+<li>Only share models and textures you made or have the right to share. Do not put the game's own meshes or textures in a pack.</li>
+</ul>
+
+<h2 id="more">8. Going further</h2>
+
+<h3>Your own materials and textures</h3>
+<p>The kit's <code>"lit"</code> material is simple: your base colour texture (if the model had one) times the player's colour, a fixed roughness, and your normal map if the model had one. For more, make the materials yourself:</p>
+<ol>
+<li>Build once, so the model is imported.</li>
+<li>Run <code>OPEN-IN-UNREAL.cmd</code>. Your assets are under <code>Content/Mods/<i>YourPack</i></code>.</li>
+<li>Edit or replace the materials. Keep them inside that folder: the game cannot load anything saved elsewhere.</li>
+<li>In every material tick <b>Used with Skeletal Mesh</b> and <b>Used with Morph Targets</b>.</li>
+<li>For a recolourable (<code>RSHC_tint_</code>) slot, add a <b>Vector Parameter</b> named exactly <code>RSHCColor</code>, default white, and multiply your base colour by it. A grey or pale texture takes colour best; black stays black.</li>
+<li>Save, close Unreal, then run <code>BUILD.cmd -SkipImport</code>. That cooks what you saved without importing the model again or touching your materials, and checks the points above.</li>
+</ol>
+<p>Running <code>BUILD.cmd</code> without <code>-SkipImport</code> imports the model again and, unless <code>materials</code> is <code>"keep"</code>, remakes the kit's materials.</p>
+
+<h3>Extra sliders</h3>
+<p>Each entry in <code>extraLines</code> adds one slider:</p>
+<pre>slider.<i>id</i>=Label|group|binding|target|min|max|default|step</pre>
+<table>
+<tr><th>binding</th><th>target</th><th>group</th><th>What it does</th></tr>
+<tr><td><code>scale</code></td><td><code>all</code>, <code>x</code>, <code>y</code>, <code>z</code></td><td><code>physical</code></td><td>Resizes the whole part. Must stay above 0.</td></tr>
+<tr><td><code>offset</code></td><td><code>x</code>, <code>y</code>, <code>z</code></td><td><code>physical</code></td><td>Moves the part, in centimetres.</td></tr>
+<tr><td><code>rotation</code></td><td><code>x</code>, <code>y</code>, <code>z</code></td><td><code>physical</code></td><td>Turns the part, in degrees.</td></tr>
+<tr><td><code>morph</code></td><td>a morph target name</td><td><code>physical</code></td><td>Replaces the automatic slider for that morph with your own label and range (within -1 to 1).</td></tr>
+<tr><td><code>scalar</code></td><td><code>slot number:ParameterName</code></td><td><code>color</code> or <code>misc</code></td><td>Sets a scalar parameter of your own material, for example <code>0:Glow</code>. The parameter must exist in the material.</td></tr>
+</table>
+<p>Examples:</p>
+<pre>"extraLines": [
+  "slider.size=Tail size|physical|scale|all|0.5|2|1|0.01",
+  "slider.up=Height|physical|offset|z|-20|20|0|0.5",
+  "slider.tilt=Tilt|physical|rotation|y|-45|45|0|1",
+  "slider.curl=Curl amount|physical|morph|TailCurl|0|1|0.3|0.01"
+]</pre>
+<p>Add <code>"autoMorphs=false"</code> as a line if you want only the sliders you list and no automatic ones.</p>
+
+<h3>Other kinds of part</h3>
+<p>RSHC also supports parts that bend with the body or face (ears, clothing-like shells) and whole body replacements. Those must be built on the game's own skeleton, one variant per head or body, and this kit does not build them. The rules are in <code>Reference\PACK-FORMAT.md</code>, with example definitions in <code>Reference\Examples</code>.</p>
+
+<h2 id="existing">9. Already have a working mod? Add one small file</h2>
+<p>If your mesh is already cooked, packed and working in the game, RSHC only needs to be told about it. You add one small text file; your own pak stays exactly as it is.</p>
+
+<div class="note"><b>Not yet tried with someone else's mod.</b> This is how RSHC's own parts are listed, and the two files below are accepted by RSHC as written. Whether your particular mesh sits, moves and colours correctly is for you to test.</div>
+
+<ol>
+<li>Make a text file whose name ends in <code>.rshcpart</code>, for example <code>yourname-flowyhair.rshcpart</code>.</li>
+<li>Put the lines below in it, with your own names and your mesh's path.</li>
+<li>Save it in <code>RSDragonwilds\Binaries\Win64\ue4ss\Mods\RSHC\Parts\</code> and restart the game.</li>
+</ol>
+
+<h3>An item that hangs on the character (hair, tail, horns, wings)</h3>
+<pre>id=yourname:flowy_hair
+slot=hair
+label=Flowy Hair
+mesh=/Game/Mods/YourPack/SK_FlowyHair.SK_FlowyHair
+socket=head
+anchor=head</pre>
+<ul>
+<li><code>id</code>: <code>yourname:part_name</code>. Saves and co-op remember it, so never change it after release.</li>
+<li><code>slot</code>: the category. <code>hair</code> lists it with the game's own hair styles and hides the native hair while it is worn. Any new lowercase word (<code>tail</code>, <code>wings</code>) makes a new category. Leave the line out and it goes under Uncategorized.</li>
+<li><code>label</code>: the name players see. Optional; without it the name is taken from the id.</li>
+<li><code>mesh</code>: the skeletal mesh's path. In Unreal, right-click the mesh, <b>Copy Reference</b>, and keep only the part that looks like <code>/Game/Folder/Name.Name</code>.</li>
+<li><code>socket</code>: the bone it hangs on (the list is in <a href="#config">section 4</a>). For a bone of the head add <code>anchor=head</code>; for the body leave that line out.</li>
+</ul>
+
+<h3>A replacement body</h3>
+<pre>id=yourname:soft_body
+slot=body
+label=Soft Body
+variant.SK_F_MED_Body_A_01=/Game/Mods/YourPack/SK_SoftBody.SK_SoftBody</pre>
+<ul>
+<li>The name after <code>variant.</code> is the game body it replaces: <code>SK_F_MED_Body_A_01</code> (female) or <code>SK_M_MED_Body_A_01</code> (male). Add one line for each you support.</li>
+<li>It becomes a choice under Body. Choosing Vanilla puts the game's body back.</li>
+<li>The mesh must be built on the game's own body skeleton, or it will not animate.</li>
+<li>Worn armour does not follow a body's sliders. It would only do so if the armour meshes had morphs with the same names, and the game's armour has none.</li>
+</ul>
+
+<h3>What RSHC takes from the mesh by itself</h3>
+<ul>
+<li><b>Sliders:</b> every morph target on the mesh becomes a 0 to 1 slider. Nothing to write.</li>
+<li><b>Dye parts</b> (hanging items): a material slot becomes a colour section when the slot is named <code>RSHC_tint_<i>name</i></code>, <code>RSHC_hair_<i>name</i></code>, <code>RSHC_skin_<i>name</i></code> or <code>RSHC_own_<i>name</i></code> (the table in <a href="#model">section 3</a> says what each does). That is a rename in your Unreal project and a re-cook. Slots with other names keep their look. A <code>RSHC_tint_</code> slot's material needs a Vector Parameter named <code>RSHCColor</code> multiplied into its colour. A replacement body keeps its own materials and has no dye sections.</li>
+<li><b>Extra sliders</b> for size, position and turning (hanging items): add <code>slider.…</code> lines from <a href="#more">section 8</a> straight into the file. A body takes morph sliders only.</li>
+</ul>
+
+<h3>Three things decide whether it works as it is</h3>
+<ul>
+<li><b>The mesh needs a path of its own.</b> If your mod works by replacing one of the game's meshes at the game's own path, it is already in the game as that native style. RSHC cannot list it as a separate choice until it is saved and cooked under its own name.</li>
+<li><b>Movement depends on where it lives.</b> RSHC shows your mesh on a component of its own. Cloth or physics that is set up inside the mesh asset should come along with it. Movement that comes from the game's own hair or character setup will not. Neither case has been tested on an RSHC part.</li>
+<li><b>Everyone needs your pak.</b> In co-op the game sends the choice and its settings, not the mesh.</li>
+</ul>
+<p>Ready-made copies of both files are in <code>Reference\Examples</code>: <code>existing-mod-item.rshcpart</code> and <code>existing-mod-body.rshcpart</code>.</p>
+
+<h2 id="trouble">10. When something is wrong</h2>
+<table>
+<tr><th>What you see</th><th>Likely cause</th></tr>
+<tr><td>The build stops at step 1 with "no skeletal mesh"</td><td>The model has no bones or no skin weights. Add an armature, weight the mesh to it, export with skinning.</td></tr>
+<tr><td>A slider is missing</td><td>The morph did not reach the file. In Blender's exporter tick Shape Keys. The build lists the morphs it found at the end.</td></tr>
+<tr><td>A section is missing in game</td><td>The material name is not exactly <code>RSHC_tint_id</code> (or <code>hair</code>, <code>skin</code>, <code>own</code>), or two materials were merged by the exporter.</td></tr>
+<tr><td>Grey checkerboard instead of the part's surface</td><td>The material's shaders did not load. Do not change the two <code>.ini</code> files in <code>UnrealProject\Config</code>; with your own materials, check the two "Used with" boxes.</td></tr>
+<tr><td>The part is not in the editor</td><td>The game was running during install, or the <code>.rshcpart</code> file is not in <code>ue4ss\Mods\RSHC\Parts</code>. RSHC writes what it loaded to <code>RSDragonwilds\Binaries\Win64\ue4ss\UE4SS.log</code>.</td></tr>
+<tr><td>The part is there but in the wrong place or size</td><td>Its origin is not where it should attach, or the units are off. Fix the model, or give players <code>offset</code>, <code>rotation</code> and <code>scale</code> sliders with good defaults.</td></tr>
+<tr><td>The colour does nothing on a tint section</td><td>Your own material has no <code>RSHCColor</code> parameter wired into its colour.</td></tr>
+<tr><td>Always bright, even in the dark</td><td><code>"materials": "unlit"</code>, or your material sends colour to Emissive.</td></tr>
+<tr><td>The first build seems stuck at step 3</td><td>It is compiling the engine's shaders. 30 to 60 minutes the first time is normal.</td></tr>
+</table>
+
+<h3>Limits</h3>
+<p>Per part: 8 colour sections, 64 sliders, 32 material slots. Per character, across all installed packs: 64 part categories and 256 saved slider values. Labels: 40 characters.</p>
+</main>
+</body>
+</html>

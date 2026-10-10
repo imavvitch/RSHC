@@ -1,0 +1,10 @@
+# Made with the RSHC Asset Kit (experimental).
+schema=1
+id=rshckit:two_section_sample
+slot=asset_kit
+slotLabel=Asset Kit
+label=Kit Sample
+mesh=/Game/Mods/RSHCKitSample/SK_SectionDemo/SkeletalMeshes/SK_SectionDemo.SK_SectionDemo
+socket=pelvis
+slider.size=Sample size|physical|scale|all|0.2|2|0.6|0.05
+slider.side=Side offset|physical|offset|y|-100|100|50|1

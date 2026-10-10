@@ -1,0 +1,11 @@
+# For a mesh that is already cooked and working in the game. Change the names and the path, save this file in
+# RSDragonwilds/Binaries/Win64/ue4ss/Mods/RSHC/Parts/ and restart the game. See section 9 of START-HERE.html.
+id=yourname:flowy_hair
+slot=hair
+label=Flowy Hair
+mesh=/Game/Mods/YourPack/SK_FlowyHair.SK_FlowyHair
+socket=head
+anchor=head
+# Optional sliders for players to fit it (remove the # to use them):
+# slider.size=Size|physical|scale|all|0.5|2|1|0.01
+# slider.up=Height|physical|offset|z|-20|20|0|0.5

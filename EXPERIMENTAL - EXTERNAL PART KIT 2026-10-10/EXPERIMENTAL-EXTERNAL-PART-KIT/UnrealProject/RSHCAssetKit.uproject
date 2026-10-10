@@ -1,0 +1,10 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.6",
+  "Description": "RSHC Asset Kit (experimental): imports and cooks one RSHC part pack",
+  "Plugins": [
+    {"Name": "PythonScriptPlugin", "Enabled": true},
+    {"Name": "EditorScriptingUtilities", "Enabled": true},
+    {"Name": "InterchangeEditor", "Enabled": true}
+  ]
+}

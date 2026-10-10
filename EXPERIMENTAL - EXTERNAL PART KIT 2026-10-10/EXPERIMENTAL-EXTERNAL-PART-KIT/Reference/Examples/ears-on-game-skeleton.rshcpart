@@ -1,0 +1,14 @@
+schema=1
+slot=ears
+slotLabel=Ears
+id=yourname:cat_ears
+label=Your Cat Ears
+kind=skeletal_attachment
+binding=leader_pose
+color=sections
+section.0=yourcat_outer|Outer|hair
+section.1=yourcat_inner|Inner|own|F2A7B5
+variant.SK_F_MED_Head_A_01=/Game/Mods/YourPack/Ears_F_MED_Head_A_01.Ears_F_MED_Head_A_01
+material.SK_F_MED_Head_A_01=1
+variant.SK_F_MED_Head_A_02=/Game/Mods/YourPack/Ears_F_MED_Head_A_02.Ears_F_MED_Head_A_02
+material.SK_F_MED_Head_A_02=3

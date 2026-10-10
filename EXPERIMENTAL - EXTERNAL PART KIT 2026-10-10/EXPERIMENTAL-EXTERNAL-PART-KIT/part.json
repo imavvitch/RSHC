@@ -1,0 +1,19 @@
+{
+  "pack": "RSHCKitSample",
+  "model": "Source/SK_SectionDemo.glb",
+
+  "id": "rshckit:two_section_sample",
+  "label": "Kit Sample",
+  "slot": "asset_kit",
+  "slotLabel": "Asset Kit",
+
+  "socket": "pelvis",
+  "anchor": "body",
+
+  "materials": "lit",
+
+  "extraLines": [
+    "slider.size=Sample size|physical|scale|all|0.2|2|0.6|0.05",
+    "slider.side=Side offset|physical|offset|y|-100|100|50|1"
+  ]
+}

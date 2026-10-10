@@ -1,0 +1,19 @@
+{
+  "pack": "YourNameHorns",
+  "model": "Source/RamHorns.glb",
+
+  "id": "yourname:ram_horns",
+  "label": "Ram Horns",
+  "slot": "horns",
+  "slotLabel": "Horns",
+
+  "socket": "head",
+  "anchor": "head",
+
+  "materials": "lit",
+
+  "extraLines": [
+    "slider.size=Horn size|physical|scale|all|0.5|2|1|0.01",
+    "slider.curl=Curl|physical|morph|HornCurl|0|1|0.3|0.01"
+  ]
+}

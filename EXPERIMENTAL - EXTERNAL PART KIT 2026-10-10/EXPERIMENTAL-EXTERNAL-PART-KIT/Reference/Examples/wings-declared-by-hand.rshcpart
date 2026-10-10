@@ -1,0 +1,16 @@
+# Example only; replace paths/source mesh name with your cooked assets.
+schema=1
+slot=wings
+slotLabel=Wings
+id=yourname:feather
+label=Feather Wings
+kind=skeletal_attachment
+binding=leader_pose
+anchor=body
+flattenHead=false
+color=sections
+section.0=feathers|Feathers|own|FFFFFF
+variant.BodyMeshName=/Game/YourPack/Wings.Wings
+slider.effect=Effect|misc|primitive|4|0|1|0|0.1
+slider.glow=Glow|color|scalar|0:Glow|0|20|0|0.1|feathers
+slider.scale=Wing size|physical|scale|all|0.5|2|1|0.01

@@ -1,0 +1,11 @@
+﻿Kit Sample (rshckit:two_section_sample) - RSHC part pack
+
+Needs RSHC (RuneScape: Dragonwilds) installed. Close the game, then copy the RSDragonwilds folder from this zip
+over the RSDragonwilds folder of your game install (merge, nothing is replaced). Start the game and open the RSHC
+editor: the part is under "Asset Kit".
+
+In co-op every player needs this pack to see the part.
+
+To remove it, delete:
+  RSDragonwilds\Content\Paks\~mods\RSHCKitSample
+  RSDragonwilds\Binaries\Win64\ue4ss\Mods\RSHC\Parts\rshckitsample.rshcpart

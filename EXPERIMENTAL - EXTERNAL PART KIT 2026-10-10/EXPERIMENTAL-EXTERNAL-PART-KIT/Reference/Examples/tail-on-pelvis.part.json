@@ -1,0 +1,20 @@
+{
+  "pack": "YourNameFoxTail",
+  "model": "Source/FoxTail.glb",
+
+  "id": "yourname:fox_tail",
+  "label": "Fox Tail",
+  "slot": "tail",
+  "slotLabel": "Tail",
+
+  "socket": "pelvis",
+  "anchor": "body",
+
+  "materials": "lit",
+
+  "extraLines": [
+    "slider.size=Tail size|physical|scale|all|0.5|2|1|0.01",
+    "slider.up=Height|physical|offset|z|-20|20|0|0.5",
+    "slider.tilt=Tilt|physical|rotation|y|-45|45|0|1"
+  ]
+}
