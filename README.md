@@ -8,4 +8,4 @@ shit ton of new features coming soon (pending)
 
 
 
-this repo currently contains RSHC's external part kit , download the whole zip or dig through the kit files here
+this repo currently contains RSHC's external part kit , download the whole zip (recommended) or dig through the kit files here
